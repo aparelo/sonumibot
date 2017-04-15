@@ -41,7 +41,7 @@ app.post('/webhook', (req, res) => {
 })
 
 function receivedMessage(event) {
-	console.log(event.message);
+	console.log("Sonumi sisu: ",event.message);
 }
 
 

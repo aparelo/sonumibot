@@ -23,6 +23,26 @@ app.post('/webhook', function(req, res) {
 	var data = req.body
 })
 
+app.post('/webhook', (req, res) => {
+	var data = req.body
+
+	if(data.object === 'page') {
+
+		data.entry.forEach((event) => {
+			if(event.message) {
+				receivedMessage(event)
+			}
+			else{
+				console.log('Unknown event: ', event)
+			}
+		})
+		res.sendStatus(200)
+	}
+})
+
+function receivedMessage(event) {
+	console.log(event.message);
+}
 
 
 

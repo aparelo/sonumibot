@@ -6,7 +6,7 @@ app.get('/', (request, response) => {
 	response.send('Hello from the other side')
 })
 
-app.listen(port, (err) => {
+app.listen(process.env.PORT || port, (err) => {
 	if(err) {
 		return console.log('This is not good', err)
 	}

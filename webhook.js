@@ -50,7 +50,6 @@ app.post('/webhook', function(req, res) {
 				else {
 					console.log('Unknown event: ', event)
 					console.log(JSON.stringify(event.message))
-					receivedMessage(event)
 				}
 			})
 		})

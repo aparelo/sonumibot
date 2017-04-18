@@ -149,7 +149,7 @@ function synonymsToString(synonymList) {
 		if(synonymFor.length > 0) {
 			output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
 			outList.push(output)
-			output = 'Need sõnad on: '
+			output = 'Need on: '
 			synonymFor.forEach(function(element, idx, array) {
 				output += element
 				if(idx != array.length - 1) {
@@ -164,9 +164,9 @@ function synonymsToString(synonymList) {
 	else if (synonyms.length == 0 && synonymFor.length > 0) {
 		output = 'Kahjuks ei ole sellel sõnal sünonüüme.'
 		outList.push(output)
-		output = 'Küll aga on see sõna ' + synonymFor.length + ' sõna sünonüüm.'
+		output = 'Õnneks leidub ' + synonymFor.length + ' sõna, mille sünonüüm see sõna on.'
 		outList.push(output)
-		output = 'Need sõnad on: '
+		output = 'Need on: '
 		synonymFor.forEach(function(element, idx, array) {
 			output += element
 			if(idx != array.length - 1) {

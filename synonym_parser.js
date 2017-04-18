@@ -24,7 +24,7 @@ module.exports = {
 		var message = event.message
 		var messageAttachments = message.attachments
 
-		console.log("Message:", message.text);
+		console.log("Message:", message);
 
 		var messageID = message.mid
 		if(message.text && !messageAttachments) {

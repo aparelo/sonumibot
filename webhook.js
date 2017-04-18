@@ -39,7 +39,7 @@ app.post('/webhook', function(req, res) {
 
 			entry.messaging.forEach(function(event) {
 				if(event.message) {
-					receivedMessage(event)
+					synonym.receivedMessage(event)
 				}
 				else {
 					console.log('Unknown event: ', event)
@@ -50,22 +50,6 @@ app.post('/webhook', function(req, res) {
 		res.sendStatus(200)
 	}
 })
-
-function receivedMessage(event) {
-	var senderID = event.sender.id
-	var receipientID = event.recipient.id
-	var timeOfMessage = event.timestamp
-	var message = event.message
-	var messageAttachments = message.attachments
-
-	console.log("Message:", message.text);
-
-	var messageID = message.mid
-	if(message.text && !messageAttachments) {
-		var keyword = message.text.toLowerCase()
-		synonym.sendMessage(senderID,keyword)
-	}
-}
 
 
 //run the server and listen

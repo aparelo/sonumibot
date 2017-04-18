@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({
 
 
 module.exports = {
-	getSynonyms: function (recepientID, keyword) {
+	sendMessage: function (recepientID, keyword) {
 		const JSONPassword = 'sapa170417'
 		const baseUrl = 'http://www.eki.ee/dict/sys/index.cgi/'
 		
@@ -38,10 +38,14 @@ module.exports = {
 			if(!error && response.statusCode == 200) {
 				//parse the JSON
 				var data = JSON.parse(body);
+				//convert the received JSON to a HTML object
 				$ = convertToHTML(data)
+				//Parse the converted HTML
 				synonyms = parseHTML($, keyword)
+				//combine the list of synonyms to a string
 				var messageString = synonymsToString(synonyms)
-				console.log(messageString);
+				//send it back
+
 				sendTextMessage(recepientID, messageString)
 			}
 		})
@@ -62,18 +66,39 @@ function convertToHTML(data) {
 function parseHTML($, keyword) {
 	var wordId = ''
 	var synonyms = []
+	//loop over all the matches
 	$('.m').each(function(index) {
-		if($(this).text() == keyword) {
-			wordId = $(this).attr('id');
+		//Check if the match matches the keyword
+		//(sometimes the keyword is a synonym for some other word)
+		if($(this).text() == keyword) { 
+			wordId = $(this).attr('id'); //remember the ID of the match
 		}
 	})
+	//remove word specific part of ID
 	wordId = wordId.split('_')[0]
+	//find all the synonyms of the word
+	//first part of the ID is the same
 	$('.syn').each(function(index) {
 		if($(this).attr('id').split('_')[0] == wordId) {
 			synonyms.push($(this).text())
 		}
 	})
 	return synonyms
+}
+
+function synonymsToString(synonyms) {
+	var output = ''
+	if(synonyms.length > 0) {
+		synonyms.forEach(function(element) {
+			output += element
+			output += ", "
+		})
+		output.substring(0,output.length-2)
+	}
+	else {
+		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."
+	}
+	return output
 }
 
 function sendTextMessage(receipientID,messageText) {
@@ -108,16 +133,6 @@ function callSendAPI(messageData) {
 			console.log(error)
 		}
 	})
-}
-
-function synonymsToString(synonyms) {
-	var output = ''
-	synonyms.forEach(function(element) {
-		output += element
-		output += ", "
-	})
-	output.substring(0,output.length-2)
-	return output
 }
 
 

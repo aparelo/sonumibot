@@ -28,12 +28,6 @@ app.get('/', (request, response) => {
 	response.send('This is a bot, find us on Messenger, nothing to see here.')
 })
 
-/*app.post('/webhook', function(req, res) {
-	console.log("Here");
-	console.log(req.body)
-	var data = req.body
-})*/
-
 app.post('/webhook', function(req, res) {
 	var data = req.body
 
@@ -72,7 +66,7 @@ function receivedMessage(event) {
 	var messageAttachments = message.attachments
 
 	if(keyword) {
-		synonym.getSynonyms(senderID,keyword)
+		synonym.sendMessage(senderID,keyword)
 	} 
 }
 

@@ -56,17 +56,15 @@ function receivedMessage(event) {
 	var receipientID = event.recipient.id
 	var timeOfMessage = event.timestamp
 	var message = event.message
+	var messageAttachments = message.attachments
 
 	console.log("Message:", message.text);
 
 	var messageID = message.mid
-
-	var keyword = message.text.toLowerCase()
-	var messageAttachments = message.attachments
-
-	if(keyword) {
+	if(message.text && !messageAttachments) {
+		var keyword = message.text.toLowerCase()
 		synonym.sendMessage(senderID,keyword)
-	} 
+	}
 }
 
 

@@ -27,8 +27,13 @@ module.exports = {
 			Q: keyword
 		})
 
+		var stringNoJSON = querystring.stringify({
+			Q: keyword
+		})
+
 		//combine into full url
 		var fullUrl = baseUrl + '?' + string
+		var urlNoJSON = baseUrl + '?' + stringNoJSON
 
 		//make a get request for the JSON
 
@@ -44,8 +49,10 @@ module.exports = {
 					//combine the list of synonyms to a string
 					var messageString = synonymsToString(synonyms)
 					//send it back
+					var message2 = 'Täielikud tulemused: ' + urlNoJSON
 
 					sendTextMessage(recepientID, messageString)
+					sendTextMessage(recepientID, message2)
 				}
 			})
 		}

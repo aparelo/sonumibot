@@ -16,54 +16,76 @@ app.use(bodyParser.urlencoded({
 
 
 module.exports = {
-	sendMessage: function (recepientID, keyword) {
-		const JSONPassword = 'sapa170417'
-		const baseUrl = 'http://www.eki.ee/dict/sys/index.cgi/'
-		
-		//create querystring
-		var string = querystring.stringify({
-			Z: 'json',
-			X: JSONPassword,
-			Q: keyword
-		})
 
-		var stringNoJSON = querystring.stringify({
-			Q: keyword
-		})
+	receivedMessage: function(event) {
+		var senderID = event.sender.id
+		var receipientID = event.recipient.id
+		var timeOfMessage = event.timestamp
+		var message = event.message
+		var messageAttachments = message.attachments
 
-		//combine into full url
-		var fullUrl = baseUrl + '?' + string
-		var urlNoJSON = baseUrl + '?' + stringNoJSON
+		console.log("Message:", message.text);
 
-		//make a get request for the JSON
-
-		if(keyword.split(" ").length == 1) {
-			request(fullUrl, function(error, response, body) {
-				if(!error && response.statusCode == 200) {
-					//parse the JSON
-					var data = JSON.parse(body);
-					//convert the received JSON to a HTML object
-					$ = convertToHTML(data)
-					//Parse the converted HTML
-					synonyms = parseHTML($, keyword)
-					//combine the list of synonyms to a string
-					var messageString = synonymsToString(synonyms)
-					//send it back
-					var message2 = 'Täielikud tulemused: ' + urlNoJSON
-
-					sendTextMessage(recepientID, messageString)
-					sendTextMessage(recepientID, message2)
-				}
-			})
+		var messageID = message.mid
+		if(message.text && !messageAttachments) {
+			var keyword = message.text.toLowerCase()
+			sendMessage(senderID,keyword)
 		}
-		else {
-			sendTextMessage(recepientID,"Palun sisesta üks sõna korraga.")
+		else if(messageAttachments) {
+			sendTextMessage(senderID,"Vabandust, ma ei oska manustega midagi teha. Proovi mult mõne sõna kohta küsida.")
 		}
 	}
+
+
+
+
 }
 
 
+function sendMessage(recepientID, keyword) {
+	const JSONPassword = 'sapa170417'
+	const baseUrl = 'http://www.eki.ee/dict/sys/index.cgi/'
+	
+	//create querystring
+	var string = querystring.stringify({
+		Z: 'json',
+		X: JSONPassword,
+		Q: keyword
+	})
 
+	var stringNoJSON = querystring.stringify({
+		Q: keyword
+	})
+
+	//combine into full url
+	var fullUrl = baseUrl + '?' + string
+	var urlNoJSON = baseUrl + '?' + stringNoJSON
+
+	//make a get request for the JSON
+
+	if(keyword.split(" ").length == 1) {
+		request(fullUrl, function(error, response, body) {
+			if(!error && response.statusCode == 200) {
+				//parse the JSON
+				var data = JSON.parse(body);
+				//convert the received JSON to a HTML object
+				$ = convertToHTML(data)
+				//Parse the converted HTML
+				synonyms = parseHTML($, keyword)
+				//combine the list of synonyms to a string
+				var messageString = synonymsToString(synonyms)
+				//send it back
+				var message2 = 'Täielikud tulemused: ' + urlNoJSON
+
+				sendTextMessage(recepientID, messageString)
+				sendTextMessage(recepientID, message2)
+			}
+		})
+	}
+	else {
+		sendTextMessage(recepientID,"Palun sisesta üks sõna korraga.")
+	}
+}
 
 function convertToHTML(data) {
 	//clean up the JSON

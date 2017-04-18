@@ -178,7 +178,7 @@ function synonymsToString(synonymList) {
 	else {
 		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."
 	}
-	return output
+	return outList
 }
 
 function sendTextMessage(receipientID,messageText) {

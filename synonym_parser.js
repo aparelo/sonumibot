@@ -50,7 +50,7 @@ module.exports = {
 			})
 		}
 		else {
-			sendTextMessage(receipientID,"Palun sisesta üks sõna korraga.")
+			sendTextMessage(recepientID,"Palun sisesta üks sõna korraga.")
 		}
 	}
 }

@@ -89,11 +89,12 @@ function parseHTML($, keyword) {
 function synonymsToString(synonyms) {
 	var output = ''
 	if(synonyms.length > 0) {
+		output += 'Sünonüümid on: '
 		synonyms.forEach(function(element) {
 			output += element
 			output += ", "
 		})
-		output.substring(0,output.length-2)
+		output.substring(0,output.length-3)
 	}
 	else {
 		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."

@@ -61,7 +61,7 @@ function receivedMessage(event) {
 
 	var messageID = message.mid
 
-	var keyword = message.text
+	var keyword = message.text.toLowerCase()
 	var messageAttachments = message.attachments
 
 	if(keyword) {

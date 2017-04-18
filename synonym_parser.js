@@ -71,13 +71,16 @@ function sendMessage(recepientID, keyword) {
 				//convert the received JSON to a HTML object
 				$ = convertToHTML(data)
 				//Parse the converted HTML
-				synonyms = parseHTML($, keyword)
+				synonymList = parseHTML($, keyword)
+				
 				//combine the list of synonyms to a string
-				var messageString = synonymsToString(synonyms)
-				//send it back
+				var messages1 = synonymsToString(synonymList)
 				var message2 = 'Täielikud tulemused: ' + urlNoJSON
 
-				sendTextMessage(recepientID, messageString)
+				messages1.forEach(function(element) {
+					sendTextMessage(recepientID, element)
+				})
+
 				sendTextMessage(recepientID, message2)
 			}
 		})
@@ -98,12 +101,16 @@ function convertToHTML(data) {
 function parseHTML($, keyword) {
 	var wordId = ''
 	var synonyms = []
+	var synonymFor = []
 	//loop over all the matches
 	$('.m').each(function(index) {
 		//Check if the match matches the keyword
 		//(sometimes the keyword is a synonym for some other word)
 		if($(this).text() == keyword) { 
 			wordId = $(this).attr('id'); //remember the ID of the match
+		}
+		else {
+			synonymFor.push($(this).text())
 		}
 	})
 	//remove word specific part of ID
@@ -115,11 +122,14 @@ function parseHTML($, keyword) {
 			synonyms.push($(this).text())
 		}
 	})
-	return synonyms
+	return [synonyms,synonymFor]
 }
 
-function synonymsToString(synonyms) {
+function synonymsToString(synonymList) {
 	var output = ''
+	var outList = []
+	synonyms = synonymList[0]
+	synonymFor = synonymList[1]
 	if(synonyms.length > 0) {
 		output += 'Leidsin ' + synonyms.length + ' sünonüümi '	
 		if(synonyms.length > 10) {
@@ -133,6 +143,37 @@ function synonymsToString(synonyms) {
 				output += ", "
 			}
 		})
+
+		outList.push(output)
+
+		if(synonymFor.length > 0) {
+			output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
+			outList.push(output)
+			output = 'Need sõnad on: '
+			synonymFor.forEach(function(element, idx, array) {
+				output += element
+				if(idx != array.length - 1) {
+					output += ", "
+				}
+			})
+
+			outList.push(output)
+		}
+		
+	}
+	else if (synonyms.length == 0 && synonymFor.length > 0) {
+		output = 'Kahjuks ei ole sellel sõnal sünonüüme.'
+		outList.push(output)
+		output = 'Küll aga on see sõna ' + synonymFor.length + ' sõna sünonüüm.'
+		outList.push(output)
+		output = 'Need sõnad on: '
+		synonymFor.forEach(function(element, idx, array) {
+			output += element
+			if(idx != array.length - 1) {
+				output += ", "
+			}
+		})
+		outList.push(output)
 	}
 	else {
 		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."

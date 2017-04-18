@@ -92,7 +92,7 @@ function parseHTML($, keyword) {
 function synonymsToString(synonyms) {
 	var output = ''
 	if(synonyms.length > 0) {
-		output += 'Leidsin ' + synonyms.length + 'sünonüümi '	
+		output += 'Leidsin ' + synonyms.length + ' sünonüümi '	
 		if(synonyms.length > 10) {
 			output += '(näitan ainult 10 esimest)'
 			synonyms = synonyms.slice(0,10)

@@ -140,21 +140,23 @@ function synonymsToString(synonymList, recepientID) {
 			}
 		})
 
-		sendTextMessage(recepientID,output)
+		sendTextMessage(recepientID,output, function() {
 
-		if(synonymFor.length > 0) {
-			output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
-			sendTextMessage(recepientID,output)
-			output = 'Need on: '
-			synonymFor.forEach(function(element, idx, array) {
-				output += element
-				if(idx != array.length - 1) {
-					output += ", "
-				}
-			})
+			if(synonymFor.length > 0) {
+				output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
+				sendTextMessage(recepientID,output, function() {
+					output = 'Need on: '
+					synonymFor.forEach(function(element, idx, array) {
+						output += element
+						if(idx != array.length - 1) {
+							output += ", "
+						}
+					})
 
-			sendTextMessage(recepientID,output)
-		}
+					sendTextMessage(recepientID,output)
+				})
+			}
+		})
 		
 	}
 	else if (synonyms.length == 0 && synonymFor.length > 0) {

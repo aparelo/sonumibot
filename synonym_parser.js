@@ -121,7 +121,7 @@ function parseHTML($, keyword) {
 	return [synonyms,synonymFor]
 }
 
-function synonymsToString(synonymList, receipientID) {
+function synonymsToString(synonymList, recepientID) {
 	var output = ''
 	var outList = []
 	synonyms = synonymList[0]
@@ -140,11 +140,11 @@ function synonymsToString(synonymList, receipientID) {
 			}
 		})
 
-		sendTextMessage(output)
+		sendTextMessage(output,recepientID)
 
 		if(synonymFor.length > 0) {
 			output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
-			sendTextMessage(output)
+			sendTextMessage(output,recepientID)
 			output = 'Need on: '
 			synonymFor.forEach(function(element, idx, array) {
 				output += element
@@ -153,15 +153,15 @@ function synonymsToString(synonymList, receipientID) {
 				}
 			})
 
-			sendTextMessage(output)
+			sendTextMessage(output,recepientID)
 		}
 		
 	}
 	else if (synonyms.length == 0 && synonymFor.length > 0) {
 		output = 'Kahjuks ei ole sellel sõnal sünonüüme.'
-		sendTextMessage(output)
+		sendTextMessage(output,recepientID)
 		output = 'Õnneks leidub ' + synonymFor.length + ' sõna, mille sünonüüm see sõna on.'
-		sendTextMessage(output)
+		sendTextMessage(output,recepientID)
 		output = 'Need on: '
 		synonymFor.forEach(function(element, idx, array) {
 			output += element
@@ -169,11 +169,11 @@ function synonymsToString(synonymList, receipientID) {
 				output += ", "
 			}
 		})
-		sendTextMessage(output)
+		sendTextMessage(output,recepientID)
 	}
 	else {
 		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."
-		sendTextMessage(output)
+		sendTextMessage(output,recepientID)
 	}
 }
 

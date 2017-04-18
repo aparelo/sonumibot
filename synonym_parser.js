@@ -94,7 +94,7 @@ function synonymsToString(synonyms) {
 		}
 		else {
 			output += "Sünonüümid on (näitan ainult esimesed 10 vastust): "
-			synonyms.slice(0,11)
+			synonyms = synonyms.slice(0,11)
 		}
 		synonyms.forEach(function(element) {
 			output += element

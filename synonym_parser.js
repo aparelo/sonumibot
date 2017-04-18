@@ -94,11 +94,13 @@ function synonymsToString(synonyms) {
 		}
 		else {
 			output += "Sünonüümid on (näitan ainult esimesed 10 vastust): "
-			synonyms = synonyms.slice(0,11)
+			synonyms = synonyms.slice(0,10)
 		}
-		synonyms.forEach(function(element) {
+		synonyms.forEach(function(element, idx, array) {
 			output += element
-			output += ", "
+			if(idx != array.length - 1) {
+				output += ", "
+			}
 		})
 	}
 	else {

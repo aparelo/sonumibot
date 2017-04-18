@@ -39,7 +39,6 @@ app.post('/webhook', function(req, res) {
 
 			entry.messaging.forEach(function(event) {
 				if(event.message) {
-					console.log(JSON.stringify(event.message))
 					receivedMessage(event)
 				}
 				else {
@@ -69,8 +68,6 @@ function receivedMessage(event) {
 		synonym.sendMessage(senderID,keyword)
 	} 
 }
-
-
 
 
 //run the server and listen

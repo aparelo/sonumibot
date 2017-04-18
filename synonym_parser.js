@@ -32,23 +32,26 @@ module.exports = {
 
 		//make a get request for the JSON
 
+		if(keyword.split(" ").length == 1) {
+			request(fullUrl, function(error, response, body) {
+				if(!error && response.statusCode == 200) {
+					//parse the JSON
+					var data = JSON.parse(body);
+					//convert the received JSON to a HTML object
+					$ = convertToHTML(data)
+					//Parse the converted HTML
+					synonyms = parseHTML($, keyword)
+					//combine the list of synonyms to a string
+					var messageString = synonymsToString(synonyms)
+					//send it back
 
-		var synonyms = []
-		request(fullUrl, function(error, response, body) {
-			if(!error && response.statusCode == 200) {
-				//parse the JSON
-				var data = JSON.parse(body);
-				//convert the received JSON to a HTML object
-				$ = convertToHTML(data)
-				//Parse the converted HTML
-				synonyms = parseHTML($, keyword)
-				//combine the list of synonyms to a string
-				var messageString = synonymsToString(synonyms)
-				//send it back
-
-				sendTextMessage(recepientID, messageString)
-			}
-		})
+					sendTextMessage(recepientID, messageString)
+				}
+			})
+		}
+		else {
+			sendTextMessage(receipientID,"Palun sisesta üks sõna korraga.")
+		}
 	}
 }
 

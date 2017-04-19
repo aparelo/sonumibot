@@ -25,6 +25,7 @@ module.exports = {
 		var messageAttachments = message.attachments
 
 		console.log("Message:", message);
+		console.log("ID:", message.mid);
 
 		var messageID = message.mid
 		if(message.text && !messageAttachments) {
@@ -139,31 +140,28 @@ function synonymsToString(synonymList, recepientID) {
 				output += ", "
 			}
 		})
+		outList.push(output)
 
-		sendTextMessage(recepientID,output, function() {
-
-			if(synonymFor.length > 0) {
-				output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
-				sendTextMessage(recepientID,output, function() {
-					output = 'Need on: '
-					synonymFor.forEach(function(element, idx, array) {
-						output += element
-						if(idx != array.length - 1) {
-							output += ", "
-						}
-					})
-
-					sendTextMessage(recepientID,output)
-				})
-			}
-		})
+		if(synonymFor.length > 0) {
+			output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
+			outList.push(output)
+			output = 'Need on: '
+			synonymFor.forEach(function(element, idx, array) {
+				output += element
+				if(idx != array.length - 1) {
+					output += ", "
+				}
+			})
+			outList.push(output)
+			
+		}
 		
 	}
 	else if (synonyms.length == 0 && synonymFor.length > 0) {
 		output = 'Kahjuks ei ole sellel sõnal sünonüüme.'
-		sendTextMessage(recepientID,output)
+		outList.push(output)
 		output = 'Õnneks leidub ' + synonymFor.length + ' sõna, mille sünonüüm see sõna on.'
-		sendTextMessage(recepientID,output)
+		outList.push(output)
 		output = 'Need on: '
 		synonymFor.forEach(function(element, idx, array) {
 			output += element
@@ -171,11 +169,11 @@ function synonymsToString(synonymList, recepientID) {
 				output += ", "
 			}
 		})
-		sendTextMessage(recepientID,output)
+		outList.push(output)
 	}
 	else {
 		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."
-		sendTextMessage(recepientID,output)
+		outList.push(output)
 	}
 }
 
@@ -191,6 +189,10 @@ function sendTextMessage(receipientID,messageText) {
 	}
 
 	callSendAPI(messageData)
+}
+
+function sendBatchMessages(recepientID, messages) {
+
 }
 
 function callSendAPI(messageData) {

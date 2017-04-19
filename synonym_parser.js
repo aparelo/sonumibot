@@ -12,7 +12,8 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }))
 
-
+var messageQueue = []
+var waiting = false
 
 
 module.exports = {
@@ -31,9 +32,16 @@ module.exports = {
 		if(message.text && !messageAttachments && !message.is_echo) {
 			var keyword = message.text.toLowerCase()
 			sendMessage(senderID,keyword)
+			sendBatchMessages(recepientID)
 		}
-		else if(messageAttachments) {
-			sendTextMessage(senderID,"Vabandust, ma ei oska manustega midagi teha. Proovi mult mõne sõna kohta küsida.")
+		else if(messageAttachments && !message.is_echo) {
+			var messageText = "Vabandust, ma ei oska manustega midagi teha. Proovi mult mõne sõna kohta küsida."
+			messageQueue.push(messageText)
+			sendBatchMessages(recepientID)
+		}
+		else if(message.is_echo) {
+			waiting = false
+			sendBatchMessages(recepientID)
 		}
 	}
 
@@ -41,7 +49,6 @@ module.exports = {
 
 
 }
-
 
 function sendMessage(recepientID, keyword) {
 	const JSONPassword = 'sapa170417'
@@ -78,12 +85,12 @@ function sendMessage(recepientID, keyword) {
 				synonymsToString(synonymList, recepientID)
 				var message2 = 'Täielikud tulemused: ' + urlNoJSON
 
-				sendTextMessage(recepientID, message2)
+				messageQueue.push(message2)
 			}
 		})
 	}
 	else {
-		sendTextMessage(recepientID,"Palun sisesta üks sõna korraga.")
+		messageQueue.push("Palun sisesta üks sõna korraga.")
 	}
 }
 
@@ -140,7 +147,7 @@ function synonymsToString(synonymList, recepientID) {
 				output += ", "
 			}
 		})
-		outList.push(output)
+		messageQueue.push(output)
 
 		if(synonymFor.length > 0) {
 			output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
@@ -152,16 +159,16 @@ function synonymsToString(synonymList, recepientID) {
 					output += ", "
 				}
 			})
-			outList.push(output)
+			messageQueue.push(output)
 			
 		}
 		
 	}
 	else if (synonyms.length == 0 && synonymFor.length > 0) {
 		output = 'Kahjuks ei ole sellel sõnal sünonüüme.'
-		outList.push(output)
+		messageQueue.push(output)
 		output = 'Õnneks leidub ' + synonymFor.length + ' sõna, mille sünonüüm see sõna on.'
-		outList.push(output)
+		messageQueue.push(output)
 		output = 'Need on: '
 		synonymFor.forEach(function(element, idx, array) {
 			output += element
@@ -169,11 +176,11 @@ function synonymsToString(synonymList, recepientID) {
 				output += ", "
 			}
 		})
-		outList.push(output)
+		messageQueue.push(output)
 	}
 	else {
 		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."
-		outList.push(output)
+		messageQueue.push(output)
 	}
 }
 
@@ -191,9 +198,19 @@ function sendTextMessage(receipientID,messageText) {
 	callSendAPI(messageData)
 }
 
-function sendBatchMessages(recepientID, messages) {
 
+
+function sendBatchMessages(recepientID) {
+	if(messageQueue.length != 0 && !waiting) {
+		sendTextMessage(recepientID,messageQueue.shift())
+		waiting = true
+	}
+	else {
+		console.log("Waiting to send a message...");
+	}
 }
+
+
 
 function callSendAPI(messageData) {
 	request({

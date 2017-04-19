@@ -203,6 +203,7 @@ function sendTextMessage(receipientID,messageText) {
 
 
 function sendBatchMessages(recepientID) {
+	console.log(waiting)
 	if(messageQueue.length != 0 && !waiting) {
 		sendTextMessage(recepientID,messageQueue.shift())
 		waiting = true

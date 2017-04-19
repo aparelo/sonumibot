@@ -32,16 +32,16 @@ module.exports = {
 		if(message.text && !messageAttachments && !message.is_echo) {
 			var keyword = message.text.toLowerCase()
 			sendMessage(senderID,keyword)
-			sendBatchMessages(recepientID)
+			sendBatchMessages(senderID)
 		}
 		else if(messageAttachments && !message.is_echo) {
 			var messageText = "Vabandust, ma ei oska manustega midagi teha. Proovi mult mõne sõna kohta küsida."
 			messageQueue.push(messageText)
-			sendBatchMessages(recepientID)
+			sendBatchMessages(senderID)
 		}
 		else if(message.is_echo) {
 			waiting = false
-			sendBatchMessages(recepientID)
+			sendBatchMessages(senderID)
 		}
 	}
 

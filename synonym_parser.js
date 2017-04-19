@@ -25,7 +25,7 @@ module.exports = {
 		var messageAttachments = message.attachments
 
 		console.log("Message:", message);
-		console.log("ID:", message.mid);
+		console.log("echo:", message.is_echo);
 
 		var messageID = message.mid
 		if(message.text && !messageAttachments) {

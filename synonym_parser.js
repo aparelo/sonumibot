@@ -32,7 +32,7 @@ module.exports = {
 		if(message.text && !messageAttachments && !message.is_echo) {
 			var keyword = message.text.toLowerCase()
 			sendMessage(senderID,keyword)
-			sendBatchMessages(senderID)
+			//sendBatchMessages(senderID)
 		}
 		else if(messageAttachments && !message.is_echo) {
 			var messageText = "Vabandust, ma ei oska manustega midagi teha. Proovi mult mõne sõna kohta küsida."
@@ -93,6 +93,7 @@ function sendMessage(recepientID, keyword) {
 	else {
 		messageQueue.push("Palun sisesta üks sõna korraga.")
 	}
+	sendBatchMessages(recepientID)
 }
 
 function convertToHTML(data) {

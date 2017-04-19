@@ -184,6 +184,7 @@ function synonymsToString(synonymList, recepientID) {
 		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."
 		messageQueue.push(output)
 	}
+	sendBatchMessages(recepientID)
 }
 
 function sendTextMessage(receipientID,messageText) {

@@ -28,7 +28,7 @@ module.exports = {
 		console.log("echo:", message.is_echo);
 
 		var messageID = message.mid
-		if(message.text && !messageAttachments) {
+		if(message.text && !messageAttachments && !message.is_echo) {
 			var keyword = message.text.toLowerCase()
 			sendMessage(senderID,keyword)
 		}

@@ -41,6 +41,7 @@ module.exports = {
 		}
 		else if(message.is_echo) {
 			waiting = false
+			console.log(messageQueue);
 			sendBatchMessages(senderID)
 		}
 	}
@@ -226,8 +227,8 @@ function callSendAPI(messageData) {
 
 		else {
 			console.log('Error sending')
-			console.log(response)
-			console.log(error)
+			//console.log(response)
+			//console.log(error)
 		}
 	})
 }

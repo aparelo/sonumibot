@@ -37,12 +37,12 @@ module.exports = {
 		else if(messageAttachments && !message.is_echo) {
 			var messageText = "Vabandust, ma ei oska manustega midagi teha. Proovi mult mõne sõna kohta küsida."
 			messageQueue.push(messageText)
-			sendBatchMessages(senderID)
+			sendBatchMessages(receipientID)
 		}
 		else if(message.is_echo) {
 			waiting = false
 			console.log(messageQueue);
-			sendBatchMessages(senderID)
+			sendBatchMessages(receipientID)
 		}
 	}
 

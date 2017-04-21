@@ -31,8 +31,7 @@ module.exports = {
 		var messageID = message.mid
 		if(message.text && !messageAttachments && !message.is_echo) {
 			var keyword = message.text.toLowerCase()
-			sendMessage(senderID,keyword)
-			//sendBatchMessages(senderID)
+			findSynonyms(senderID,keyword)
 		}
 		else if(messageAttachments && !message.is_echo) {
 			var messageText = "Vabandust, ma ei oska manustega midagi teha. Proovi mult mõne sõna kohta küsida."
@@ -51,7 +50,7 @@ module.exports = {
 
 }
 
-function sendMessage(recepientID, keyword) {
+function findSynonyms(recepientID, keyword) {
 	const JSONPassword = 'sapa170417'
 	const baseUrl = 'http://www.eki.ee/dict/sys/index.cgi/'
 	
@@ -231,8 +230,6 @@ function callSendAPI(messageData) {
 
 		else {
 			console.log('Error sending')
-			//console.log(response)
-			//console.log(error)
 		}
 	})
 }

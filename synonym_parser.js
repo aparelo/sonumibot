@@ -153,7 +153,7 @@ function synonymsToString(synonymList, recepientID) {
 
 		if(synonymFor.length > 0) {
 			output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
-			outList.push(output)
+			messageQueue.push(output)
 			output = 'Need on: '
 			synonymFor.forEach(function(element, idx, array) {
 				output += element

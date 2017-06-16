@@ -201,27 +201,6 @@ function sendTextMessage(receipientID,messageText) {
 }
 
 
-function sendMessageWithReply(receipientID,messageText,replies) {
-	var messageData = {
-		recipient: {
-			"id": receipientID
-		},
-		message: {
-			"text": messageText,
-			"quick-replies": [
-					replies.forEach(function(reply) {
-						{
-							"content-type": text,
-							"title": reply,
-							"payload": reply
-						}
-					})
-			]
-		}
-	}
-}
-
-
 function sendBatchMessages(recepientID) {
 	console.log(waiting)
 	console.log(messageQueue.length)

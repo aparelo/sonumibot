@@ -61,7 +61,7 @@ app.get('/webhook', function(req, res) {
 
 
 app.get('/', (request, response) => {
-	response.send('This is a bot, find us on Messenger, nothing to see here.')
+	response.send(page_body);
 })
 
 app.post('/webhook', function(req, res) {

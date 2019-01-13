@@ -219,7 +219,7 @@ function sendBatchMessages(recepientID) {
 function callSendAPI(messageData) {
 	request({
 		uri: 'https://graph.facebook.com/v2.6/me/messages',
-		qs: {access_token: 'EAAQ2kbeTE7sBAJEm9GsrzqLcm0q0NqL9y3kzgKbNRyj2fhxZBCY9ls0ITVOJVquxjJZChq8ZAXRB5YquS0LFSg4NODCeZCEkroC0Y2EROuWmrXt4ZBRozOKWJoG01ky7rBkUFy8PMg2F9qoS0BYKZAsuKf0UMo3NQk7biOHWn4ZAwZDZD'},
+		qs: {access_token: 'EAAQ2kbeTE7sBALxJ4NlEVpj9guD03QSb7QmmkByeydJ8ZCkc7ZC5ojhQQryqW6ZCKngLmg9et8ZAef4LYIieSkpzwL7J4gc1h3I4Ag9EcYrPbNKiU9sD5ihcFOVEqrRT4o0qVWzhlSv9aINnyW2TdjCi8iiIpyL211hCBZBZCwhgZDZD'},
 		method: 'POST',
 		json: messageData
 	}, function(error, response, body) {

@@ -40,7 +40,7 @@ module.exports = {
 		}
 		else if(message.is_echo) {
 			waiting = false
-			console.log(messageQueue);
+			console.log("Current queue: " + messageQueue);
 			sendBatchMessages(receipientID)
 		}
 	}
@@ -202,8 +202,8 @@ function sendTextMessage(receipientID,messageText) {
 
 
 function sendBatchMessages(recepientID) {
-	console.log(waiting)
-	console.log(messageQueue.length)
+	console.log("current waiting status: " + waiting)
+	console.log("Number of messages in the queue: " + messageQueue.length)
 	if(messageQueue.length != 0 && waiting != true) {
 		sendTextMessage(recepientID,messageQueue.shift())
 		waiting = true

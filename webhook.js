@@ -7,6 +7,42 @@ const app = express()
 const port = process.env.PORT || 3000
 
 
+const page_body = `
+<htmL>
+<head>
+<title>Sünonüümirobot</title>
+<script>
+window.fbAsyncInit = function() {
+  FB.init({
+	appId            : 'your-app-id',
+	autoLogAppEvents : true,
+	xfbml            : true,
+	version          : 'v3.2'
+  });
+};
+
+(function(d, s, id){
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement(s); js.id = id;
+   js.src = "https://connect.facebook.net/en_US/sdk.js";
+   fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));
+</script>
+</head>
+<body>
+<h1>Olen sünonüümirobot, kirjuta mulle!</h1>
+<div class="fb-messengermessageus" 
+  messenger_app_id="1185899384869819" 
+  page_id="1473407816103463"
+  color="white"
+  size="xlarge">
+</div>
+</body>
+</html>
+`
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true

@@ -187,6 +187,7 @@ function synonymsToString(synonymList, recepientID) {
 }
 
 function sendTextMessage(receipientID,messageText) {
+	//send a message
 	
 	var messageData = {
 		recipient: {

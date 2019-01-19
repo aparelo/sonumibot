@@ -6,6 +6,9 @@ const cheerio = require('cheerio')
 
 const app = express()
 
+const JSONPassword = '' //eki JSON password (email webmaster@eki.ee to get one)
+const fb_token = '' //Facebook app token
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -35,13 +38,13 @@ module.exports = {
 		}
 		else if(messageAttachments && !message.is_echo) {
 			var messageText = "Vabandust, ma ei oska manustega midagi teha. Proovi mult mõne sõna kohta küsida."
-			messageQueue.push(messageText)
-			sendBatchMessages(senderID)
+			addMessage(messageText, senderID)
+			sendBatchMessages()
 		}
 		else if(message.is_echo) {
 			waiting = false
 			console.log("Current queue: " + messageQueue);
-			sendBatchMessages(receipientID)
+			sendBatchMessages()
 		}
 	}
 
@@ -51,14 +54,14 @@ module.exports = {
 }
 
 function findSynonyms(recepientID, keyword) {
-	const JSONPassword = 'sapa170417'
 	const baseUrl = 'http://www.eki.ee/dict/sys/index.cgi/'
 	
 	//create querystring
 	var string = querystring.stringify({
 		Z: 'json',
 		X: JSONPassword,
-		Q: keyword
+		Q: keyword,
+		C02: 1 //dont look for similar words
 	})
 
 	var stringNoJSON = querystring.stringify({
@@ -86,14 +89,14 @@ function findSynonyms(recepientID, keyword) {
 				synonymsToString(synonymList, recepientID)
 				var message2 = 'Täielikud tulemused: ' + urlNoJSON
 
-				messageQueue.push(message2)
+				addMessage(message2, recepientID)
 			}
 		})
 	}
 	else {
-		messageQueue.push("Palun sisesta üks sõna korraga.")
+		addMessage("Palun sisesta üks sõna korraga.", recepientID)
 	}
-	sendBatchMessages(recepientID)
+	sendBatchMessages()
 }
 
 function convertToHTML(data) {
@@ -149,11 +152,11 @@ function synonymsToString(synonymList, recepientID) {
 				output += ", "
 			}
 		})
-		messageQueue.push(output)
+		addMessage(output,recepientID)
 
 		if(synonymFor.length > 0) {
 			output = 'Lisaks on sõna veel ' + synonymFor.length + " sõna sünonüüm."
-			messageQueue.push(output)
+			addMessage(output,recepientID)
 			output = 'Need on: '
 			synonymFor.forEach(function(element, idx, array) {
 				output += element
@@ -161,16 +164,16 @@ function synonymsToString(synonymList, recepientID) {
 					output += ", "
 				}
 			})
-			messageQueue.push(output)
+			addMessage(output, recepientID)
 			
 		}
 		
 	}
 	else if (synonyms.length == 0 && synonymFor.length > 0) {
 		output = 'Kahjuks ei ole sellel sõnal sünonüüme.'
-		messageQueue.push(output)
+		addMessage(output, recepientID)
 		output = 'Õnneks leidub ' + synonymFor.length + ' sõna, mille sünonüüm see sõna on.'
-		messageQueue.push(output)
+		addMessage(output, recepientID)
 		output = 'Need on: '
 		synonymFor.forEach(function(element, idx, array) {
 			output += element
@@ -178,13 +181,13 @@ function synonymsToString(synonymList, recepientID) {
 				output += ", "
 			}
 		})
-		messageQueue.push(output)
+		addMessage(output, recepientID)
 	}
 	else {
 		output = "Sünonüüme ei leitud, proovi mõnda teist sõna."
-		messageQueue.push(output)
+		addMessage(output, recepientID)
 	}
-	sendBatchMessages(recepientID)
+	sendBatchMessages()
 }
 
 function sendTextMessage(receipientID,messageText) {
@@ -202,12 +205,18 @@ function sendTextMessage(receipientID,messageText) {
 	callSendAPI(messageData)
 }
 
+function addMessage(message, receipientID) {
+	var queueItem = [receipientID, message]
+	messageQueue.push(queueItem)
+}
 
-function sendBatchMessages(recepientID) {
+
+function sendBatchMessages() {
 	console.log("current waiting status: " + waiting)
 	console.log("Number of messages in the queue: " + messageQueue.length)
 	if(messageQueue.length != 0 && waiting != true) {
-		sendTextMessage(recepientID,messageQueue.shift())
+		var queueItem = messageQueue.shift()
+		sendTextMessage(queueItem[0],queueItem[1])
 		waiting = true
 	}
 	else {
@@ -220,7 +229,7 @@ function sendBatchMessages(recepientID) {
 function callSendAPI(messageData) {
 	request({
 		uri: 'https://graph.facebook.com/v2.6/me/messages',
-		qs: {access_token: 'EAAQ2kbeTE7sBALxJ4NlEVpj9guD03QSb7QmmkByeydJ8ZCkc7ZC5ojhQQryqW6ZCKngLmg9et8ZAef4LYIieSkpzwL7J4gc1h3I4Ag9EcYrPbNKiU9sD5ihcFOVEqrRT4o0qVWzhlSv9aINnyW2TdjCi8iiIpyL211hCBZBZCwhgZDZD'},
+		qs: {access_token: fb_token},
 		method: 'POST',
 		json: messageData
 	}, function(error, response, body) {
